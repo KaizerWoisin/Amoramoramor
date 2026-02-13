@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Nuestra Galería 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffc0cb 0%, #ff69b4 50%, #ff1493 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 48px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: #ff1493;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+        }
+
+        .gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 20, 147, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-card .caption {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .photo-card .caption h3 {
+            color: #ff1493;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .photo-card .caption p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .upload-section {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .upload-section h2 {
+            color: #ff1493;
+            margin-bottom: 20px;
+        }
+
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">← Volver</button>
+
+    <div class="header">
+        <h1>💕 Nuestros Momentos 💕</h1>
+        <p>Cada foto cuenta nuestra historia</p>
+    </div>
+
+    <div class="upload-section">
+        <h2>Agregar Nuevo Recuerdo</h2>
+        <input type="file" id="fileInput" accept="image/*" multiple>
+        <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+            📸 Subir Fotos
+        </button>
+        <p style="margin-top: 15px; color: #666; font-size: 14px;">
+            (Las fotos se guardarán localmente en tu navegador)
+        </p>
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Las fotos se cargarán aquí -->
+    </div>
+
+    <div class="empty-state" id="emptyState">
+        <h2>📷</h2>
+        <h2>Aún no hay fotos</h2>
+        <p>Sube tus primeras fotos para comenzar tu galería de amor</p>
+    </div>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+        const emptyState = document.getElementById('emptyState');
+        const fileInput = document.getElementById('fileInput');
+
+        // Fotos de ejemplo (puedes reemplazar con URLs reales)
+        const defaultPhotos = [
+            {
+                url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500',
+                title: 'Nuestro primer día juntos',
+                description: 'Cuando todo comenzó 💕'
+            },
+            {
+                url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500',
+                title: 'Atardecer romántico',
+                description: 'Mirando el cielo juntos 🌅'
+            },
+            {
+                url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500',
+                title: 'Nuestra aventura',
+                description: 'Explorando el mundo 🌍'
+            },
+            {
+                url: 'https://images.unsplash.com/photo-1522673607211-8e2a96ba8090?w=500',
+                title: 'Risas y felicidad',
+                description: 'Los mejores momentos 😊'
+            },
+            {
+                url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500',
+                title: 'Un día especial',
+                description: 'Momentos que atesoramos 💖'
+            },
+            {
+                url: 'https://images.unsplash.com/photo-1521898284481-a5ec348cb555?w=500',
+                title: 'Juntos para siempre',
+                description: 'Nuestro amor eterno 💑'
+            }
+        ];
+
+        // Cargar fotos guardadas o usar las de ejemplo
+        let photos = [];
+        
+        function loadPhotos() {
+            const savedPhotos = localStorage.getItem('galleryPhotos');
+            if (savedPhotos) {
+                photos = JSON.parse(savedPhotos);
+            } else {
+                photos = defaultPhotos;
+            }
+            renderGallery();
+        }
+
+        function renderGallery() {
+            if (photos.length === 0) {
+                emptyState.style.display = 'block';
+                gallery.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                gallery.style.display = 'grid';
+                gallery.innerHTML = '';
+                
+                photos.forEach((photo, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'photo-card';
+                    card.style.animationDelay = (index * 0.1) + 's';
+                    card.innerHTML = `
+                        <img src="${photo.url}" alt="${photo.title}">
+                        <div class="caption">
+                            <h3>${photo.title}</h3>
+                            <p>${photo.description}</p>
+                        </div>
+                    `;
+                    gallery.appendChild(card);
+                });
+            }
+        }
+
+        // Manejar subida de archivos
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files.length === 0) return;
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const newPhoto = {
+                        url: event.target.result,
+                        title: file.name.split('.')[0],
+                        description: 'Un nuevo recuerdo 💕'
+                    };
+                    photos.push(newPhoto);
+                    localStorage.setItem('galleryPhotos', JSON.stringify(photos));
+                    renderGallery();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            fileInput.value = '';
+        });
+
+        // Cargar fotos al inicio
+        loadPhotos();
+    </script>
+</body>
+</html>

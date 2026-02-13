@@ -1,15 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Para mi Amor 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Index</title>
-    </head>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffc0cb 0%, #ff69b4 50%, #ff1493 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-    <body>
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
-  
+        /* Corazones flotantes */
+        .heart {
+            position: fixed;
+            font-size: 30px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            animation: float 4s ease-in forwards;
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-1000px) rotate(360deg);
+            }
+        }
+
+        /* Sobre cerrado */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            width: 300px;
+            height: 200px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .envelope.opened {
+            display: none;
+        }
+
+        .envelope-body {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(to bottom, #ff6b9d 0%, #c94e77 100%);
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .envelope-flap {
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff1493;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top center;
+            transition: transform 0.6s;
+            z-index: 2;
+        }
+
+        .envelope:hover .envelope-flap {
+            transform: rotateX(-20deg);
+        }
+
+        .envelope-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* Card de pregunta */
+        .question-card {
+            display: none;
+            background: white;
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            max-width: 500px;
+            animation: cardAppear 0.6s ease-out;
+        }
+
+        .question-card.show {
+            display: block;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotateY(-180deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .question-card h1 {
+            color: #ff1493;
+            font-size: 36px;
+            margin-bottom: 40px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #ffc0cb 0%, #ffb6c1 100%);
+            color: #ff1493;
+            position: absolute;
+            transition: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: #ff1493;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        /* Card de celebración */
+        .celebration-card {
+            display: none;
+            background: white;
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            animation: celebrate 0.8s ease-out;
+        }
+
+        .celebration-card.show {
+            display: block;
+        }
+
+        @keyframes celebrate {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration-card h1 {
+            color: #ff1493;
+            font-size: 42px;
+            margin-bottom: 30px;
+        }
+
+        .celebration-card p {
+            color: #ff69b4;
+            font-size: 24px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .celebration-card .emoji {
+            font-size: 60px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Easter egg button */
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(50, 50, 50, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            z-index: 10000;
+        }
+
+        .easter-egg:hover {
+            background: rgba(50, 50, 50, 0.6);
+            color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sobre -->
+    <div class="envelope-wrapper">
+        <div class="envelope" id="envelope">
+            <div class="envelope-body">
+                <div class="envelope-flap"></div>
+                <div class="envelope-text">
+                    💌<br>
+                    Click para abrir
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card de pregunta -->
+    <div class="question-card" id="questionCard">
+        <h1>¿Quieres ser mi valentín? uwu</h1>
+        <div class="buttons" id="buttonsContainer">
+            <button class="btn btn-yes" id="btnYes">Sí</button>
+            <button class="btn btn-no" id="btnNo">No</button>
+        </div>
+        <div class="message" id="message"></div>
+    </div>
+
+    <!-- Card de celebración -->
+    <div class="celebration-card" id="celebrationCard">
+        <div class="emoji">💕</div>
+        <h1>Yupiiiii, sabía que me amabas uwu</h1>
+        <p>yo también te amo mucho muakata 😘</p>
+        <p>Mañana se come yoniroke gentee muaaaaa 🍜💕</p>
+        <div class="emoji">🎉</div>
+    </div>
+
+    <!-- Easter egg -->
+    <button class="easter-egg" id="easterEgg">¿¿¿¿????</button>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const questionCard = document.getElementById('questionCard');
+        const celebrationCard = document.getElementById('celebrationCard');
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        const message = document.getElementById('message');
+        const easterEgg = document.getElementById('easterEgg');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+
+        const messages = [
+            "¿Estás segura? 🥺",
+            "Piénsalo mejor 💕",
+            "No seas malita 😢",
+            "Dale que sí pues 🙏",
+            "Anda, di que sí 💖",
+            "No me hagas esto 😭",
+            "Sabes que me quieres 💝",
+            "Por favorcito 🥺👉👈"
+        ];
+
+        let messageIndex = 0;
+
+        // Abrir sobre
+        envelope.addEventListener('click', () => {
+            envelope.classList.add('opened');
+            setTimeout(() => {
+                questionCard.classList.add('show');
+                startHearts();
+            }, 300);
+        });
+
+        // Botón Sí
+        btnYes.addEventListener('click', () => {
+            questionCard.classList.remove('show');
+            setTimeout(() => {
+                celebrationCard.classList.add('show');
+                createConfetti();
+            }, 300);
+        });
+
+        // Botón No - Teletransporte
+        btnNo.addEventListener('click', (e) => {
+            e.preventDefault();
+        });
+
+        btnNo.addEventListener('mouseenter', () => {
+            const containerRect = buttonsContainer.getBoundingClientRect();
+            const btnRect = btnNo.getBoundingClientRect();
+            
+            // Posición aleatoria dentro del contenedor de botones
+            const maxX = containerRect.width - btnRect.width;
+            const maxY = containerRect.height - btnRect.height;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+            
+            // Mostrar mensaje
+            message.textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length;
+        });
+
+        // Easter egg - Galería
+        easterEgg.addEventListener('click', () => {
+            window.location.href = 'gallery.html';
+        });
+
+        // Lluvia de corazones
+        function startHearts() {
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '💕';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Confetti de corazones para celebración
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createHeart();
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
