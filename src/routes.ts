@@ -11,4 +11,6 @@ export const router = createBrowserRouter([
     path: "/galeria",
     Component: PhotoGallery,
   },
-]);
+], {
+  basename: import.meta.env.BASE_URL,
+});

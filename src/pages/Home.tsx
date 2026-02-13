@@ -3,11 +3,6 @@ import { motion } from 'motion/react';
 import { Heart } from 'lucide-react';
 import { ValentineEnvelope } from '../components/ValentineEnvelope';
 import { ValentineCard } from '../components/ValentineCard';
-import catImage from 'figma:asset/bfda80da96e6c2e9ac6ecf997c9a8ce4e3863087.png';
-import emojiLoveImage from 'figma:asset/0f8681309b32d28e7cadee162d87e4980f19a839.png';
-import catHeartImage from 'figma:asset/d62d11cac5b139f4e4af106616c8e13b583b804a.png';
-import flowerEmojiImage from 'figma:asset/12c3a77b34fe996cdcc874cf7d24e2256ef2acc2.png';
-import surpriseEmojiImage from 'figma:asset/f9fdc33a60376393326d163dac587b34311f5e77.png';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -96,10 +91,8 @@ export default function Home() {
             transition={{ delay: 0.5, type: "spring", stiffness: 200, damping: 15 }}
             className="absolute right-10 top-1/2 -translate-y-1/2 z-40 pointer-events-none"
           >
-            <motion.img
-              src={surpriseEmojiImage}
-              alt="Surprise emoji"
-              className="w-40 h-40 md:w-48 md:h-48"
+            <motion.div
+              className="text-8xl md:text-9xl"
               animate={{ 
                 rotate: [-5, 5, -5],
                 y: [0, -10, 0]
@@ -109,7 +102,9 @@ export default function Home() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-            />
+            >
+              👀
+            </motion.div>
           </motion.div>
 
           {/* Decoraciones flotantes izquierda */}
@@ -301,68 +296,68 @@ export default function Home() {
       {/* Imágenes que aparecen cuando dice "Sí" */}
       {showImages && (
         <>
-          {/* Imagen izquierda superior - Gato con corazón rosa */}
+          {/* Imagen izquierda superior - Emoji */}
           <motion.div
             initial={{ x: -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.2 }}
             className="absolute top-10 left-10 z-40 pointer-events-none"
           >
-            <motion.img
-              src={catHeartImage}
-              alt="Cat with heart"
-              className="w-32 h-32 md:w-40 md:h-40 rounded-2xl shadow-lg"
+            <motion.div
+              className="w-32 h-32 md:w-40 md:h-40 text-7xl md:text-8xl flex items-center justify-center"
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-            />
+            >
+              💝
+            </motion.div>
           </motion.div>
 
-          {/* Imagen derecha superior - Gato con rosa */}
+          {/* Imagen derecha superior - Emoji */}
           <motion.div
             initial={{ x: 300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.4 }}
             className="absolute top-10 right-10 z-40 pointer-events-none"
           >
-            <motion.img
-              src={catImage}
-              alt="Cat with rose"
-              className="w-32 h-32 md:w-40 md:h-40 rounded-2xl shadow-lg"
+            <motion.div
+              className="w-32 h-32 md:w-40 md:h-40 text-7xl md:text-8xl flex items-center justify-center"
               animate={{ rotate: [0, -5, 5, -5, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-            />
+            >
+              🌹
+            </motion.div>
           </motion.div>
 
-          {/* Imagen izquierda inferior - Emoji enamorado */}
+          {/* Imagen izquierda inferior - Emoji */}
           <motion.div
             initial={{ x: -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.6 }}
             className="absolute bottom-10 left-10 z-40 pointer-events-none"
           >
-            <motion.img
-              src={emojiLoveImage}
-              alt="Love emoji"
-              className="w-32 h-32 md:w-40 md:h-40 rounded-2xl shadow-lg"
+            <motion.div
+              className="w-32 h-32 md:w-40 md:h-40 text-7xl md:text-8xl flex items-center justify-center"
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-            />
+            >
+              😍
+            </motion.div>
           </motion.div>
 
-          {/* Imagen derecha inferior - Emoji flor */}
+          {/* Imagen derecha inferior - Emoji */}
           <motion.div
             initial={{ x: 300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.8 }}
             className="absolute bottom-10 right-10 z-40 pointer-events-none"
           >
-            <motion.img
-              src={flowerEmojiImage}
-              alt="Flower emoji"
-              className="w-32 h-32 md:w-40 md:h-40 rounded-2xl shadow-lg"
+            <motion.div
+              className="w-32 h-32 md:w-40 md:h-40 text-7xl md:text-8xl flex items-center justify-center"
               animate={{ rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 0.5 }}
-            />
+            >
+              🌸
+            </motion.div>
           </motion.div>
         </>
       )}
